@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Notepad</title>
+    <!-- Включване на Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Добавете допълнителни стилове тук */
+        body {
+            background-color: #e4e4e4;
+        }
+
+        #content {
+            background-color: #1D5B79;
+            color: white;
+            border: none;
+        }
+
+        .custom-label {
+            font-weight: bold;
+            color: 001C30;
+        }
+		
+		#title {
+            background-color: #1D5B79;
+            color: white;
+            border: none;
+        }
+		
+        /* Стилове за линкове */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">📒Обикновен бележник</h1>
+        <div class="mb-3">
+            <label for="title" class="form-label custom-label">Заглавие на файла:</label>
+            <input type="text" class="form-control" id="title" placeholder="Въведете заглавие на файла" onkeyup="saveContent()">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label custom-label">Съдържание:</label>
+            <textarea class="form-control" id="content" rows="10" onkeyup="saveContent()"></textarea>
+        </div>
+        <div class="d-flex justify-content-between"> <!-- Контейнер за бутоните -->
+            <button class="btn btn-primary" onclick="downloadFile()">Свали файл</button>
+            <button class="btn btn-danger" onclick="clearContent()">Изчисти текста</button> <!-- Новият бутон -->
+        </div>
+    </div>
+    
+    <!-- Включване на Bootstrap JavaScript (по избор) -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->
+
+    <script>
+        function saveContent() {
+            var title = document.getElementById('title').value;
+            var content = document.getElementById('content').value;
+            localStorage.setItem('title', title);
+            localStorage.setItem('content', content);
+        }
+
+        function downloadFile() {
+            var title = localStorage.getItem('title') || 'untitled';
+            var content = localStorage.getItem('content') || '';
+            var blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = title + '.txt';
+            a.click();
+        }
+
+        // Load content from local storage if available
+        window.onload = function() {
+            document.getElementById('title').value = localStorage.getItem('title') || '';
+            document.getElementById('content').value = localStorage.getItem('content') || '';
+        };
+
+        function clearContent() {
+            document.getElementById('title').value = '';
+            document.getElementById('content').value = '';
+            saveContent(); // Извикваме saveContent() функцията, за да запазим празните стойности в local storage
+        }
+    </script>
+    
+    <div class="footer">
+        <a href="#">Политика за поверителност</a>
+        <a href="#">Условия за ползване</a>
+        <a href="#">За нас</a>
+    </div>
+</body>
+</html>
